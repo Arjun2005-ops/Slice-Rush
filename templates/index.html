@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="description" content="Fruit Cut – Slice fruits in Classic, Time Attack, or Zen mode!" />
+  <title>Fruit Cut 🍉 – Choose Your Mode</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+  <canvas id="gameCanvas"></canvas>
+
+  <!-- HUD -->
+  <div id="hud" class="hidden">
+    <div id="scorePanel">
+      <div class="hud-label">SCORE</div>
+      <div id="scoreValue">0</div>
+    </div>
+
+    <!-- Timer (Time Attack only) -->
+    <div id="timerPanel" class="hidden">
+      <div class="hud-label">TIME</div>
+      <div id="timerValue">60</div>
+    </div>
+
+    <!-- Lives (Classic only) -->
+    <div id="livesPanel">
+      <div class="hud-label">LIVES</div>
+      <div id="heartsContainer">
+        <span class="heart" id="heart1">❤️</span>
+        <span class="heart" id="heart2">❤️</span>
+        <span class="heart" id="heart3">❤️</span>
+      </div>
+    </div>
+
+    <div id="comboPanel" class="hidden">
+      <div id="comboText">COMBO x2</div>
+    </div>
+  </div>
+
+  <!-- Start / Mode Select Screen -->
+  <div id="startScreen" class="overlay-screen">
+    <div class="screen-content wide">
+      <div class="fruit-logo">🍉</div>
+      <h1 class="game-title">FRUIT CUT</h1>
+      <p class="game-subtitle">Choose your mode and start slicing</p>
+
+      <div class="mode-grid">
+        <!-- Classic -->
+        <button class="mode-card mode-classic" data-mode="classic" id="btnClassic">
+          <span class="mode-icon">⚔️</span>
+          <span class="mode-name">CLASSIC</span>
+          <ul class="mode-features">
+            <li>💣 Bombs included</li>
+            <li>❤️ 3 lives system</li>
+            <li>📈 Difficulty scales</li>
+          </ul>
+        </button>
+
+        <!-- Time Attack -->
+        <button class="mode-card mode-time" data-mode="timeattack" id="btnTimeAttack">
+          <span class="mode-icon">⏱️</span>
+          <span class="mode-name">TIME ATTACK</span>
+          <ul class="mode-features">
+            <li>⏳ 60 second timer</li>
+            <li>🚫 No miss penalty</li>
+            <li>🔥 Max combo score</li>
+          </ul>
+        </button>
+
+        <!-- Zen -->
+        <button class="mode-card mode-zen" data-mode="zen" id="btnZen">
+          <span class="mode-icon">🧘</span>
+          <span class="mode-name">ZEN</span>
+          <ul class="mode-features">
+            <li>🍎 No bombs ever</li>
+            <li>♾️ No game over</li>
+            <li>✨ Pure practice</li>
+          </ul>
+        </button>
+      </div>
+
+      <p class="hint-text">🖱️ Hold &amp; drag to slice &nbsp;|&nbsp; 📱 Touch &amp; swipe on mobile</p>
+    </div>
+  </div>
+
+  <!-- Game Over / Result Screen -->
+  <div id="gameOverScreen" class="overlay-screen hidden">
+    <div class="screen-content">
+      <div id="resultEmoji" class="game-over-emoji">💥</div>
+      <h2 id="resultTitle" class="game-over-title">GAME OVER</h2>
+      <div id="modeTag" class="mode-tag">CLASSIC</div>
+      <div class="score-display">
+        <div class="score-row">
+          <span class="score-label">Your Score</span>
+          <span id="finalScore" class="score-num">0</span>
+        </div>
+        <div class="score-row best-row">
+          <span class="score-label">Best Score</span>
+          <span id="highScore" class="score-num best">0</span>
+        </div>
+      </div>
+      <div class="result-btns">
+        <button id="restartBtn" class="btn-primary">🔄 PLAY AGAIN</button>
+        <button id="menuBtn" class="btn-secondary">🏠 MENU</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

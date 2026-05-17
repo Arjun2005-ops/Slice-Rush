@@ -1,0 +1,465 @@
+/* =============================================
+   FRUIT CUT – style.css
+   Dark cinematic theme with glass-morphism UI
+   ============================================= */
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0a0a1a;
+  font-family: 'Rajdhani', sans-serif;
+  color: #fff;
+  touch-action: none; /* prevent scroll on mobile during swipe */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ---------- Canvas ---------- */
+#gameCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: crosshair;
+}
+
+/* ---------- HUD ---------- */
+#hud {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 16px 24px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+#scorePanel,
+#livesPanel {
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 10px 20px;
+  min-width: 100px;
+  text-align: center;
+}
+
+.hud-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+#scoreValue {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 0 20px rgba(255, 220, 50, 0.8);
+  line-height: 1;
+}
+
+#heartsContainer {
+  font-size: 20px;
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.heart {
+  display: inline-block;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.heart.lost {
+  opacity: 0.15;
+  transform: scale(0.8);
+  filter: grayscale(1);
+}
+
+/* ---------- Combo Panel ---------- */
+#comboPanel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 20;
+}
+
+#comboText {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 42px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #f9ca24, #f0932b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  filter: drop-shadow(0 0 20px rgba(249, 202, 36, 0.9));
+  animation: comboAnim 0.4s ease-out;
+}
+
+@keyframes comboAnim {
+  0%   { transform: scale(0.5) rotate(-5deg); opacity: 0; }
+  60%  { transform: scale(1.2) rotate(3deg);  opacity: 1; }
+  100% { transform: scale(1)   rotate(0deg);  opacity: 1; }
+}
+
+/* ---------- Overlay Screens ---------- */
+.overlay-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  background: rgba(5, 5, 20, 0.82);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: opacity 0.4s ease;
+}
+
+.overlay-screen.hidden {
+  display: none;
+}
+
+.screen-content {
+  text-align: center;
+  padding: 40px 48px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 28px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow:
+    0 0 60px rgba(100, 200, 255, 0.08),
+    inset 0 1px 0 rgba(255,255,255,0.12);
+  max-width: 460px;
+  width: 90%;
+  animation: screenIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes screenIn {
+  from { transform: scale(0.8) translateY(30px); opacity: 0; }
+  to   { transform: scale(1)   translateY(0px);  opacity: 1; }
+}
+
+/* ---------- Start Screen ---------- */
+.fruit-logo {
+  font-size: 72px;
+  line-height: 1;
+  animation: floatBounce 2.5s ease-in-out infinite;
+}
+
+@keyframes floatBounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-12px); }
+}
+
+.game-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 48px;
+  font-weight: 900;
+  margin: 12px 0 8px;
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 50%, #4facfe 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 4px;
+}
+
+.game-subtitle {
+  font-size: 16px;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 28px;
+  letter-spacing: 1px;
+}
+
+.instruction-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.instruction-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+}
+
+.instruction-icon {
+  font-size: 20px;
+}
+
+/* ---------- Game Over Screen ---------- */
+.game-over-emoji {
+  font-size: 64px;
+  animation: shakeIt 0.5s ease;
+}
+
+@keyframes shakeIt {
+  0%,100% { transform: rotate(0); }
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+}
+
+.game-over-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 38px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  margin: 14px 0 24px;
+  color: #ff6b6b;
+  text-shadow: 0 0 30px rgba(255, 107, 107, 0.6);
+}
+
+.score-display {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 20px 30px;
+  margin-bottom: 28px;
+}
+
+.score-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.score-row + .score-row {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  margin-top: 8px;
+  padding-top: 16px;
+}
+
+.score-label {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.score-num {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  color: #fff;
+}
+
+.score-num.best {
+  background: linear-gradient(135deg, #f9ca24, #f0932b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ---------- Button ---------- */
+.btn-primary {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 16px 48px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  color: #0a1a10;
+  box-shadow:
+    0 0 30px rgba(67, 233, 123, 0.4),
+    0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  pointer-events: all;
+}
+
+.btn-primary:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow:
+    0 0 50px rgba(67, 233, 123, 0.6),
+    0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+.btn-primary:active {
+  transform: scale(0.97) translateY(0);
+}
+
+/* ---------- Utility ---------- */
+.hidden { display: none !important; }
+
+/* ---------- Wide screen-content (for mode select) ---------- */
+.screen-content.wide { max-width: 780px; }
+
+/* ---------- Mode Grid ---------- */
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.mode-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 22px 16px;
+  border-radius: 20px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  background: rgba(255,255,255,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  pointer-events: all;
+  color: #fff;
+}
+.mode-card:hover  { transform: translateY(-6px) scale(1.03); }
+.mode-card:active { transform: scale(0.97); }
+
+.mode-icon { font-size: 38px; line-height: 1; }
+
+.mode-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.mode-features {
+  list-style: none;
+  text-align: left;
+  font-size: 12px;
+  color: rgba(255,255,255,0.65);
+  margin-top: 6px;
+  line-height: 1.9;
+}
+
+/* Classic – red/orange accent */
+.mode-classic {
+  border-color: rgba(231,76,60,0.4);
+  box-shadow: 0 0 24px rgba(231,76,60,0.12);
+}
+.mode-classic:hover { border-color: #e74c3c; box-shadow: 0 0 40px rgba(231,76,60,0.35); }
+.mode-classic .mode-name { color: #ff6b6b; }
+
+/* Time Attack – cyan/blue accent */
+.mode-time {
+  border-color: rgba(52,152,219,0.4);
+  box-shadow: 0 0 24px rgba(52,152,219,0.12);
+}
+.mode-time:hover { border-color: #3498db; box-shadow: 0 0 40px rgba(52,152,219,0.35); }
+.mode-time .mode-name { color: #74b9ff; }
+
+/* Zen – green accent */
+.mode-zen {
+  border-color: rgba(46,213,115,0.4);
+  box-shadow: 0 0 24px rgba(46,213,115,0.12);
+}
+.mode-zen:hover { border-color: #2ed573; box-shadow: 0 0 40px rgba(46,213,115,0.35); }
+.mode-zen .mode-name { color: #55efc4; }
+
+.hint-text {
+  font-size: 13px;
+  color: rgba(255,255,255,0.35);
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+}
+
+/* ---------- Timer Panel (Time Attack HUD) ---------- */
+#timerPanel {
+  background: rgba(52,152,219,0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(52,152,219,0.4);
+  border-radius: 16px;
+  padding: 10px 20px;
+  min-width: 100px;
+  text-align: center;
+}
+#timerValue {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: #74b9ff;
+  text-shadow: 0 0 20px rgba(116,185,255,0.8);
+  line-height: 1;
+}
+#timerValue.urgent { color: #ff6b6b; text-shadow: 0 0 20px rgba(255,107,107,0.9); animation: pulse 0.4s ease infinite alternate; }
+@keyframes pulse { from { transform: scale(1); } to { transform: scale(1.1); } }
+
+/* ---------- Mode Tag (Result Screen) ---------- */
+.mode-tag {
+  display: inline-block;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  padding: 5px 16px;
+  border-radius: 50px;
+  margin-bottom: 20px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.6);
+}
+
+/* ---------- Result Buttons ---------- */
+.result-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+.btn-secondary {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 14px 28px;
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 50px;
+  cursor: pointer;
+  background: transparent;
+  color: rgba(255,255,255,0.7);
+  transition: all 0.15s ease;
+  pointer-events: all;
+}
+.btn-secondary:hover { border-color: rgba(255,255,255,0.5); color: #fff; background: rgba(255,255,255,0.06); }
+
+/* ---------- Mobile Adjustments ---------- */
+@media (max-width: 600px) {
+  .game-title    { font-size: 34px; }
+  .screen-content { padding: 28px 20px; }
+  .mode-grid     { grid-template-columns: 1fr; gap: 10px; }
+  .mode-card     { flex-direction: row; padding: 16px 20px; text-align: left; gap: 14px; }
+  .mode-features { display: none; }
+  #scoreValue    { font-size: 22px; }
+  #timerValue    { font-size: 22px; }
+  #comboText     { font-size: 32px; }
+  #hud           { padding: 10px 14px; }
+  #scorePanel, #livesPanel, #timerPanel { padding: 8px 14px; min-width: 80px; }
+}
+
